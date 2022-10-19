@@ -1,0 +1,77 @@
+#!/bin/bash
+########################################################################
+# Copyright (c) 1988-2022 $organization$
+#
+# This software is provided by the author and contributors ``as is''
+# and any express or implied warranties, including, but not limited to,
+# the implied warranties of merchantability and fitness for a particular
+# purpose are disclaimed. In no event shall the author or contributors
+# be liable for any direct, indirect, incidental, special, exemplary,
+# or consequential damages (including, but not limited to, procurement
+# of substitute goods or services; loss of use, data, or profits; or
+# business interruption) however caused and on any theory of liability,
+# whether in contract, strict liability, or tort (including negligence
+# or otherwise) arising in any way out of the use of this software,
+# even if advised of the possibility of such damage.
+#
+#   File: vizio.sh
+#
+# Author: $author$
+#   Date: 10/19/2022
+#
+# vizio utility script
+########################################################################
+dirname=`dirname $0`
+basename=`basename $0`
+
+title='vizio utility script'
+utility='vizio'
+creds=$dirname'/../creds/build/'$utility
+
+default_host=`$creds/vizio-host`
+default_port=`$creds/vizio-port`
+default_token=`$creds/vizio-auth-token`
+
+if [ "$default_host" == "" ]; then
+default_host='localhost'
+fi # [ "$default_host" == "" ]
+
+if [ "$default_port" == "" ]; then
+default_port='7345'
+fi # [ "$default_port" == "" ]
+
+if [ "$default_token" == "" ]; then
+default_token='localtoken'
+fi # [ "$default_token" == "" ]
+
+host=$default_host
+port=$default_port
+token=$default_token
+
+if [ "$1" != "" ]; then
+    if [ "$2" != "" ]; then
+    host=$1
+    else # [ "$2" != "" ]; then
+    host=$default_host
+    fi # [ "$2" != "" ]; then
+else # [ "$1" != "" ]; then
+host=$default_host
+fi # [ "$1" != "" ]; then
+
+if [ "$1" != "" ]; then
+    if [ "$2" != "" ]; then
+    echo $utility -o$host -p$port -a$token $2 $3 $4 ...
+    $utility -o$host -p$port -a$token $2 $3 $4
+    echo ... $utility -o$host -p$port -a$token $2 $3 $4
+    else # [ "$2" != "" ]; then
+    echo $utility -o$host -p$port -a$token $1 $2 $3 $4 ...
+    $utility -o$host -p$port -a$token $1 $2 $3 $4
+    echo ... $utility -o$host -p$port -a$token $1 $2 $3 $4
+    fi # [ "$2" != "" ]; then
+else # [ "$1" != "" ]; then
+echo
+echo $title
+echo
+echo usage $basename '[hostname['$host':['$port']]]' '...' '(-h or --help -- options)'
+echo
+fi # [ "$1" != "" ]; then
