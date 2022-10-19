@@ -14,39 +14,21 @@
 # or otherwise) arising in any way out of the use of this software,
 # even if advised of the possibility of such damage.
 #
-#   File: vizio.sh
+#   File: sony-soundbar
 #
 # Author: $author$
 #   Date: 10/19/2022
 #
-# vizio utility script
+# sony soundbar utility script
 ########################################################################
 dirname=`dirname $0`
 basename=`basename $0`
 
-title='vizio utility script'
-utility=$dirname'/../build/vizio'
-creds=$dirname'/../creds/build/vizio'
+title='sony soundbar utility script'
+utility=$dirname'/../build/sony'
+creds=$dirname'/../creds/build/sony'
 
-default_host=`$creds/vizio-host`
-default_port=`$creds/vizio-port`
-default_token=`$creds/vizio-auth-token`
-
-if [ "$default_host" == "" ]; then
-default_host='localhost'
-fi # [ "$default_host" == "" ]
-
-if [ "$default_port" == "" ]; then
-default_port='7345'
-fi # [ "$default_port" == "" ]
-
-if [ "$default_token" == "" ]; then
-default_token='localtoken'
-fi # [ "$default_token" == "" ]
-
-host=$default_host
-port=$default_port
-token=$default_token
+default_host=`$creds/sony-soundbar-host`
 
 if [ "$1" != "" ]; then
     if [ "$2" != "" ]; then
@@ -60,18 +42,13 @@ fi # [ "$1" != "" ]; then
 
 if [ "$1" != "" ]; then
     if [ "$2" != "" ]; then
-    echo $utility -o$host -p$port -a$token $2 $3 $4 ...
-    $utility -o$host -p$port -a$token $2 $3 $4
-    echo ... $utility -o$host -p$port -a$token $2 $3 $4
+    $utility -o$host $2 $3 $4
     else # [ "$2" != "" ]; then
-    echo $utility -o$host -p$port -a$token $1 $2 $3 $4 ...
-    $utility -o$host -p$port -a$token $1 $2 $3 $4
-    echo ... $utility -o$host -p$port -a$token $1 $2 $3 $4
+    $utility -o$host $1 $2 $3 $4
     fi # [ "$2" != "" ]; then
 else # [ "$1" != "" ]; then
 echo
 echo $title
 echo
-echo usage $basename '[hostname['$host':['$port']]]' '...' '(-h or --help -- options)'
-echo
+echo usage `basename $0` '[hostname['$host'(`sony-soundbar-host`)]]' '...' '(-h or --help -- options)'
 fi # [ "$1" != "" ]; then
