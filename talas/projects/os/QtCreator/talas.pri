@@ -103,17 +103,24 @@ OPENSSL_PRJ_BLD = $${OTHER_BLD}/$${OPENSSL_PRJ}/build/$${TALAS_BUILD}/QtCreator/
 #OPENSSL_LIB = $${OPENSSL_THIRDPARTY_PRJ_MAKE_BLD}/lib
 #OPENSSL_LIB = $${OPENSSL_THIRDPARTY_PKG_BLD}/lib
 #OPENSSL_LIB = $${OPENSSL_THIRDPARTY_PRJ_BLD}/lib
-OPENSSL_LIB = $${OPENSSL_PKG_BLD}/lib
+#OPENSSL_LIB = $${OPENSSL_PKG_BLD}/lib
 #OPENSSL_LIB = $${OPENSSL_PRJ_BLD}/lib
 #OPENSSL_LIB = $${TALAS_LIB}
-OPENSSL_LIB_NAME = $${OPENSSL_NAME}
+#OPENSSL_LIB_NAME = $${OPENSSL_NAME}
+OPENSSL_LIB = $${OTHER_BLD}/$${THIRDPARTY_PRJ}/build/$${OPENSSL_BUILD_DIR}/lib
+
+contains(OPENSSL_LIB_DIR, OPENSSL_HOME_BUILD_LIB) {
+OPENSSL_LIB_DIR = $${OPENSSL_HOME_BUILD_LIB}
+} else {
+OPENSSL_LIB_DIR = $${OPENSSL_LIB}
+} # contains(OPENSSL_LIB_DIR, OPENSSL_HOME_BUILD_LIB)
 
 # openssl LIBS
 #
 openssl_LIBS += \
--L$${OPENSSL_LIB}/lib$${OPENSSL_LIB_NAME} \
--l$${OPENSSL_LIB_NAME} \
-
+-L$${OPENSSL_LIB_DIR} \
+-lssl \
+-lcrypto \
 
 ########################################################################
 # libressl
@@ -127,16 +134,25 @@ LIBRESSL_PRJ_BLD = $${OTHER_BLD}/$${LIBRESSL_PRJ}/build/$${TALAS_BUILD}/QtCreato
 #LIBRESSL_LIB = $${LIBRESSL_THIRDPARTY_PRJ_MAKE_BLD}/lib
 #LIBRESSL_LIB = $${LIBRESSL_THIRDPARTY_PKG_BLD}/lib
 #LIBRESSL_LIB = $${LIBRESSL_THIRDPARTY_PRJ_BLD}/lib
-LIBRESSL_LIB = $${LIBRESSL_PKG_BLD}/lib
+#LIBRESSL_LIB = $${LIBRESSL_PKG_BLD}/lib
 #LIBRESSL_LIB = $${LIBRESSL_PRJ_BLD}/lib
 #LIBRESSL_LIB = $${TALAS_LIB}
-LIBRESSL_LIB_NAME = $${LIBRESSL_NAME}
+#LIBRESSL_LIB_NAME = $${LIBRESSL_NAME}
+LIBRESSL_LIB = $${OTHER_BLD}/$${THIRDPARTY_PRJ}/build/$${LIBRESSL_BLD_DIR}/lib
+
+contains(LIBRESSL_LIB_DIR, LIBRESSL_HOME_BUILD_LIB) {
+LIBRESSL_LIB_DIR = $${LIBRESSL_HOME_BUILD_LIB}
+} else {
+LIBRESSL_LIB_DIR = $${LIBRESSL_LIB}
+} # contains(LIBRESSL_LIB_DIR, LIBRESSL_HOME_BUILD_LIB)
 
 # libressl LIBS
 #
 libressl_LIBS += \
--L$${LIBRESSL_LIB}/lib$${LIBRESSL_LIB_NAME} \
--l$${LIBRESSL_LIB_NAME} \
+-L$${LIBRESSL_LIB_DIR} \
+-ltls \
+-lssl \
+-lcrypto \
 
 ########################################################################
 # bn
@@ -282,3 +298,20 @@ $${talas_base_LIBS} \
 $${talas_rsa_LIBS} \
 $${build_talas_LIBS} \
 $${talas_os_LIBS} \
+
+# talas libressl LIBS
+#
+talas_libressl_LIBS += \
+$${talas_base_LIBS} \
+$${libressl_LIBS} \
+$${build_talas_LIBS} \
+$${talas_os_LIBS} \
+
+# talas openssl LIBS
+#
+talas_openssl_LIBS += \
+$${talas_base_LIBS} \
+$${openssl_LIBS} \
+$${build_talas_LIBS} \
+$${talas_os_LIBS} \
+
