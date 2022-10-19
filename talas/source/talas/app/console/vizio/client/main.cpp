@@ -16,9 +16,15 @@
 ///   File: main.cpp
 ///
 /// Author: $author$
-///   Date: 2/25/2021
+///   Date: 2/25/2021, 10/19/2022
 ///////////////////////////////////////////////////////////////////////
 #include "talas/app/console/vizio/client/main.hpp"
+
+#if !defined(TALAS_APP_CONSOLE_VIZIO_CLIENT_MAIN_INSTANCE)
+#if defined(XOS_CONSOLE_MAIN_MAIN)
+#define TALAS_APP_CONSOLE_VIZIO_CLIENT_MAIN_INSTANCE
+#endif /// defined(XOS_CONSOLE_MAIN_MAIN) 
+#endif /// !defined(TALAS_APP_CONSOLE_VIZIO_CLIENT_MAIN_INSTANCE) 
 
 namespace talas {
 namespace app {
