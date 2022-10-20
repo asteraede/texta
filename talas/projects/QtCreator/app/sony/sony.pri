@@ -16,7 +16,7 @@
 #   File: sony.pri
 #
 # Author: $author$
-#   Date: 10/19/2022
+#   Date: 10/19/2022, 10/20/2022
 #
 # generic QtCreator project .pri file for framework talas executable sony
 ########################################################################
@@ -67,6 +67,7 @@ $${TALAS_SRC}/talas/io/socket/reader.hpp \
 $${TALAS_SRC}/talas/io/socket/writer.hpp \
 \
 $${TALAS_SRC}/talas/console/main.hpp \
+$${TALAS_SRC}/talas/console/main_main.hpp \
 $${TALAS_SRC}/talas/app/console/main_opt.hpp \
 $${TALAS_SRC}/talas/app/console/main.hpp \
 $${TALAS_SRC}/talas/app/console/network/base/main_opt.hpp \
@@ -76,8 +77,6 @@ $${TALAS_SRC}/talas/app/console/network/client/main.hpp \
 \
 $${TALAS_SRC}/talas/app/console/sony/client/main_opt.hpp \
 $${TALAS_SRC}/talas/app/console/sony/client/main.hpp \
-\
-$${TALAS_SRC}/talas/console/main_main.hpp \
 
 # sony SOURCES
 #
@@ -92,8 +91,6 @@ $${TALAS_SRC}/talas/io/socket/reader.cpp \
 \
 $${TALAS_SRC}/talas/app/console/sony/client/main_opt.cpp \
 $${TALAS_SRC}/talas/app/console/sony/client/main.cpp \
-\
-$${TALAS_SRC}/talas/console/main_main.cpp \
 
 ########################################################################
 # sony FRAMEWORKS
