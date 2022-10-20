@@ -16,7 +16,7 @@
 ///   File: main_opt.cpp
 ///
 /// Author: $author$
-///   Date: 2/4/2017
+///   Date: 2/4/2017, 10/20/2022
 ///////////////////////////////////////////////////////////////////////
 #ifndef _TALAS_APP_CONSOLE_LIBRESSL_MAIN_HPP
 #include "talas/app/console/libressl/main_opt.hpp"
@@ -45,7 +45,9 @@ public:
      const char* optname, int optind,
      int argc, char**argv, char**env) {
         int err = 0;
-        run_ = &Derives::run_client;
+        //run_ = &Derives::run_client;
+        if (!(err = this->set_run_client(argc, argv, env))) {
+        }
         return err;
     }
     ///////////////////////////////////////////////////////////////////////
@@ -54,7 +56,9 @@ public:
      const char* optname, int optind,
      int argc, char**argv, char**env) {
         int err = 0;
-        run_ = &Derives::run_server;
+        //run_ = &Derives::run_server;
+        if (!(err = this->set_run_server(argc, argv, env))) {
+        }
         return err;
     }
     ///////////////////////////////////////////////////////////////////////
@@ -85,7 +89,9 @@ public:
      const char* optname, int optind,
      int argc, char**argv, char**env) {
         int err = 0;
-        accept_one_ = true;
+        if (!(err = this->set_run_server(argc, argv, env))) {
+            accept_one_ = true;
+        }
         return err;
     }
 

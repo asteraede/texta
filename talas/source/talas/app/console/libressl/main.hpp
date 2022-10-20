@@ -16,7 +16,7 @@
 ///   File: main.hpp
 ///
 /// Author: $author$
-///   Date: 2/3/2017, 2/14/2021
+///   Date: 2/3/2017, 10/20/2022
 ///////////////////////////////////////////////////////////////////////
 #ifndef _TALAS_APP_CONSOLE_LIBRESSL_MAIN_HPP
 #define _TALAS_APP_CONSOLE_LIBRESSL_MAIN_HPP
@@ -44,7 +44,7 @@ public:
     ///////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////
     main()
-    : run_(0),
+    : run_(0), run_tls_(0),
       connect_socket_cbs_(0),
       accept_one_(false),
       host_("localhost"), port_("4433"),
@@ -66,16 +66,31 @@ protected:
         socket(Derives& _main): main(_main) {}
         Derives& main;
     };
+
     ///////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////
     int (Derives::*run_)(int argc, char** argv, char** env);
     virtual int run(int argc, char** argv, char** env) {
         int err = 0;
 
+        if ((run_)) {
+            err = (this->*run_)(argc, argv, env);
+        } else {
+            err = this->usage(argc, argv, env);
+        }
+        return err;
+    }
+
+    ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
+    int (Derives::*run_tls_)(int argc, char** argv, char** env);
+    virtual int run_tls(int argc, char** argv, char** env) {
+        int err = 0;
+
         TALAS_LOG_DEBUG("tls_init()...");
         if (!(err = tls_init())) {
-            if ((run_)) {
-                err = (this->*run_)(argc, argv, env);
+            if ((run_tls_)) {
+                err = (this->*run_tls_)(argc, argv, env);
             } else {
                 err = run_client(argc, argv, env);
             }
@@ -84,6 +99,12 @@ protected:
         } else {
             TALAS_LOG_ERROR("...failed err = " << err << " on tls_init()");
         }
+        return err;
+    }
+    ///////////////////////////////////////////////////////////////////////
+    virtual int set_run_tls(int argc, char** argv, char** env) {
+        int err = 0;
+        run_ = &Derives::run_tls;
         return err;
     }
 
@@ -130,6 +151,14 @@ protected:
             tls = 0;
         } else {
             TALAS_LOG_ERROR("...failed tls = " << 0 << " on tls_client()");
+        }
+        return err;
+    }
+    ///////////////////////////////////////////////////////////////////////
+    virtual int set_run_client(int argc, char** argv, char** env) {
+        int err = 0;
+        if (!(err = set_run_tls(argc, argv, env))) {
+            run_tls_ = &Derives::run_client;
         }
         return err;
     }
@@ -318,6 +347,14 @@ protected:
             config = 0;
         } else {
             TALAS_LOG_ERROR("...failed config = " << 0 << " on tls_config_new()");
+        }
+        return err;
+    }
+    ///////////////////////////////////////////////////////////////////////
+    virtual int set_run_server(int argc, char** argv, char** env) {
+        int err = 0;
+        if (!(err = set_run_tls(argc, argv, env))) {
+            run_tls_ = &Derives::run_server;
         }
         return err;
     }

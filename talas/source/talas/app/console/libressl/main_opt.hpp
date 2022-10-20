@@ -16,7 +16,7 @@
 ///   File: main_opt.hpp
 ///
 /// Author: $author$
-///   Date: 2/4/2017
+///   Date: 2/4/2017, 10/20/2022
 ///////////////////////////////////////////////////////////////////////
 #ifndef _TALAS_APP_CONSOLE_LIBRESSL_MAIN_OPT_HPP
 #define _TALAS_APP_CONSOLE_LIBRESSL_MAIN_OPT_HPP
@@ -88,7 +88,7 @@
    {TALAS_APP_CONSOLE_LIBRESSL_MAIN_ONE_OPT, \
     TALAS_APP_CONSOLE_LIBRESSL_MAIN_ONE_OPTARG_REQUIRED, \
     TALAS_APP_CONSOLE_LIBRESSL_MAIN_ONE_OPTARG_RESULT, \
-    TALAS_APP_CONSOLE_LIBRESSL_MAIN_CLIENT_OPTVAL_C}, \
+    TALAS_APP_CONSOLE_LIBRESSL_MAIN_ONE_OPTVAL_C}, \
 
 ///////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////

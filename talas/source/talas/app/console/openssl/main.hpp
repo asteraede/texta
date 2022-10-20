@@ -16,7 +16,7 @@
 ///   File: main.hpp
 ///
 /// Author: $author$
-///   Date: 12/25/2015
+///   Date: 12/25/2015, 10/20/2022
 ///////////////////////////////////////////////////////////////////////
 #ifndef _TALAS_APP_CONSOLE_OPENSSL_MAIN_HPP
 #define _TALAS_APP_CONSOLE_OPENSSL_MAIN_HPP
@@ -62,6 +62,12 @@ public:
     ///////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////
     main() {
+        construct();
+    }
+    virtual ~main() {
+    }
+private:
+    void construct() {
         verify_client = TALAS_APP_CONSOLE_OPENSSL_VERIFY_CLIENT;
         accept_host = TALAS_APP_CONSOLE_OPENSSL_ACCEPT_HOST;
         accept_port = TALAS_APP_CONSOLE_OPENSSL_ACCEPT_PORT;
@@ -91,8 +97,6 @@ public:
         read_data_ = 0;
         write_data_ = 0;
     }
-    virtual ~main() {
-    }
 
 protected:
     ///////////////////////////////////////////////////////////////////////
@@ -104,7 +108,7 @@ protected:
 protected:
     ///////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////
-    run_t run_, run_connection_, run_accept_connection_;
+    run_t run_, run_ssl_, run_connection_, run_accept_connection_;
     read_data_t read_data_;
     write_data_t write_data_;
     bool verify_client;
@@ -126,18 +130,37 @@ protected:
     virtual int run(int argc, char** argv, char** env) {
         int err = 0;
 
+        if ((run_)) {
+            err = (this->*run_)(argc, argv, env);
+        } else {
+            err = this->usage(argc, argv, env);
+        }
+        return err;
+    }
+
+    ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
+    virtual int run_ssl(int argc, char** argv, char** env) {
+        int err = 0;
+
         ERR_load_BIO_strings();
         SSL_load_error_strings();
         SSL_library_init();
 
         if ((run_)) {
-            err = (this->*run_)(argc, argv, env);
+            err = (this->*run_ssl_)(argc, argv, env);
         } else {
             err = run_client(argc, argv, env);
         }
 
         ERR_free_strings();
         EVP_cleanup();
+        return err;
+    }
+    ///////////////////////////////////////////////////////////////////////
+    virtual int set_run_ssl(int argc, char** argv, char** env) {
+        int err = 0;
+        run_ = &Derives::run_ssl;
         return err;
     }
 
@@ -203,6 +226,14 @@ protected:
                 TALAS_LOG_MESSAGE_DEBUG("...SSL_CTX_free(ctx)");
                 SSL_CTX_free(ctx);
             }
+        }
+        return err;
+    }
+    ///////////////////////////////////////////////////////////////////////
+    virtual int set_run_server(int argc, char** argv, char** env) {
+        int err = 0;
+        if (!(err = set_run_ssl(argc, argv, env))) {
+            run_ssl_ = &Derives::run_server;
         }
         return err;
     }
@@ -450,6 +481,14 @@ protected:
                 TALAS_LOG_MESSAGE_DEBUG("...SSL_CTX_free(ctx)");
                 SSL_CTX_free(ctx);
             }
+        }
+        return err;
+    }
+    ///////////////////////////////////////////////////////////////////////
+    virtual int set_run_client(int argc, char** argv, char** env) {
+        int err = 0;
+        if (!(err = set_run_ssl(argc, argv, env))) {
+            run_ssl_ = &Derives::run_client;
         }
         return err;
     }
@@ -822,7 +861,9 @@ protected:
      const char* optname, int optind,
      int argc, char**argv, char**env) {
         int err = 0;
-        run_ = &Derives::run_client;
+        //run_ = &Derives::run_client;
+        if (!(err = set_run_client(argc, argv, env))) {
+        }
         return err;
     }
     ///////////////////////////////////////////////////////////////////////
@@ -831,7 +872,9 @@ protected:
      const char* optname, int optind,
      int argc, char**argv, char**env) {
         int err = 0;
-        run_ = &Derives::run_server;
+        //run_ = &Derives::run_server;
+        if (!(err = set_run_server(argc, argv, env))) {
+        }
         return err;
     }
     ///////////////////////////////////////////////////////////////////////
@@ -899,7 +942,9 @@ protected:
      const char* optname, int optind,
      int argc, char**argv, char**env) {
         int err = 0;
-        accept_once = true;
+        if (!(err = set_run_server(argc, argv, env))) {
+            accept_once = true;
+        }
         return err;
     }
 
